@@ -30,7 +30,7 @@ namespace YTCG_Deck_Builder_API.Controllers
 
         [HttpGet]
         public IActionResult GetAllUsers() {
-            var allUsers = _dataContext.Users.ToList();
+            var allUsers = _dataContext.Users.Select(u => new { u.UserName, u.Email }).ToList();
             return Ok(allUsers);
         }
 
