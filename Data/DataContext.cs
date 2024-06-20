@@ -13,6 +13,10 @@ namespace YTCG_Deck_Builder_API.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Deck> Decks { get; set; }
         public DbSet<Card> Cards { get; set; }
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<Reply> Replies { get; set; }
+        public DbSet<PostRating> PostRatings { get; set; }
+        public DbSet<ReplyRating> ReplyRatings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -35,6 +39,26 @@ namespace YTCG_Deck_Builder_API.Data
                 .WithMany(d => d.Cards)
                 .HasForeignKey(c => c.DeckId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Post>()
+                .HasOne(p => p.User)
+                .WithMany(u => u.Posts)
+                .HasForeignKey(p => p.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Reply>()
+                .HasOne(r => r.User)
+                .WithMany(u => u.Replies)
+                .HasForeignKey(r => r.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Reply>()
+                .HasOne(r => r.Post)
+                .WithMany(p => p.Replies)
+                .HasForeignKey(r => r.PostId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace YTCG_Deck_Builder_API.Dto
+﻿namespace YTCG_Deck_Builder_API.Models.Dto
 {
     public class UserCreateDto
     {

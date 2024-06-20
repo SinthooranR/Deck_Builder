@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using YTCG_Deck_Builder_API.Data;
-using YTCG_Deck_Builder_API.Dto;
+using YTCG_Deck_Builder_API.Models.Dto;
 using YTCG_Deck_Builder_API.Models.Entitities;
 
 namespace YTCG_Deck_Builder_API.Controllers

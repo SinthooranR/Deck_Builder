@@ -1,11 +1,7 @@
-﻿
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using NuGet.Common;
 using YTCG_Deck_Builder_API.Data;
-using YTCG_Deck_Builder_API.Dto;
+using YTCG_Deck_Builder_API.Models.Dto;
 using YTCG_Deck_Builder_API.Models.Entitities;
 using YTCG_Deck_Builder_API.Services;
 
@@ -20,7 +16,8 @@ namespace YTCG_Deck_Builder_API.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly ILogger<UserController> _logger;
         private readonly TokenGenerator _tokenGenerator;
-        public UserController(DataContext dataContext, UserManager<User> userManager, SignInManager<User> signInManager, ILogger<UserController> logger, TokenGenerator tokenGenerator) {
+        public UserController(DataContext dataContext, UserManager<User> userManager, SignInManager<User> signInManager, ILogger<UserController> logger, TokenGenerator tokenGenerator)
+        {
             _dataContext = dataContext;
             _userManager = userManager;
             _signInManager = signInManager;
@@ -29,7 +26,8 @@ namespace YTCG_Deck_Builder_API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllUsers() {
+        public IActionResult GetAllUsers()
+        {
             var allUsers = _dataContext.Users.Select(u => new { u.UserName, u.Email }).ToList();
             return Ok(allUsers);
         }
@@ -52,6 +50,10 @@ namespace YTCG_Deck_Builder_API.Controllers
                 CreatedAt = DateTime.Now,
                 Decks = [],
                 Cards = [],
+                Posts = [],
+                Replies = [],
+                PostRatings = [],
+                ReplyRatings = [],
             };
 
             var result = await _userManager.CreateAsync(newUser, userCreateDto.Password);
@@ -98,7 +100,7 @@ namespace YTCG_Deck_Builder_API.Controllers
                     });
 
 
-                    return Ok(new {Token = token});
+                    return Ok(new { Token = token });
                 }
                 else
                 {
