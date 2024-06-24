@@ -32,18 +32,18 @@ namespace YTCG_Deck_Builder_API.Controllers
 
 
 
-            var decks = _dataContext.Decks.Where(d => d.UserId.Equals(user.Id)).Select(d => new Deck() {Id = d.Id, Name=d.Name, Cards=d.Cards.Select(c => new Card() { Id=c.Id, Name = c.Name}).ToList()}).ToList();
+            var decks = _dataContext.Decks.Where(d => d.UserId.Equals(user.Id)).Select(d => new Deck() { Id = d.Id, Name = d.Name, Cards = d.Cards.Select(c => new Card() { Id = c.Id, Name = c.Name }).ToList() }).ToList();
 
             return Ok(decks);
         }
 
 
         [HttpGet("deckId")]
-        public async Task<IActionResult> getDeckById([FromQuery] int deckId)
+        public IActionResult getDeckById([FromQuery] int deckId)
         {
             var deck = _dataContext.Decks.Where(d => d.Id == deckId).Select(d => new Deck() { Id = d.Id, Name = d.Name, Cards = d.Cards.Select(c => new Card() { Id = c.Id, Name = c.Name }).ToList() }).ToList();
 
-            if(deck == null)
+            if (deck == null)
             {
                 return BadRequest(ModelState);
             }
@@ -79,6 +79,35 @@ namespace YTCG_Deck_Builder_API.Controllers
             };
 
             return Ok(deckResponseDto);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> removeDeck(string userId, int deckId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var deck = _dataContext.Decks.Include(d => d.Cards).Where(d => d.Id == deckId).FirstOrDefault();
+
+            if (deck == null)
+            {
+                return NotFound();
+            }
+
+
+            if (deck.Cards != null)
+            {
+                _dataContext.Cards.RemoveRange(deck.Cards);
+            }
+
+            _dataContext.Remove(deck);
+            _dataContext.SaveChanges();
+
+            return Ok("Deck removed successfully");
         }
     }
 }

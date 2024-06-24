@@ -117,5 +117,46 @@ namespace YTCG_Deck_Builder_API.Controllers
             return Ok("Post Deleted Successfully");
         }
 
+        [HttpPut("{postId}")]
+        public async Task<IActionResult> updatePostRating(PostRatingUpdateDto postRatingUpdateDto)
+        {
+            var user = await _userManager.FindByIdAsync(postRatingUpdateDto.UserId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var post = _dataContext.Posts.Include(p => p.PostRatings).Where(post => post.Id == postRatingUpdateDto.PostId).FirstOrDefault();
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            var existingRating = post.PostRatings?.Where(rating => rating.UserId == postRatingUpdateDto.UserId).FirstOrDefault();
+            //if a new rating is being made since there was none found
+            if (existingRating == null)
+            {
+
+                var newRating = new PostRating()
+                {
+                    PostId = postRatingUpdateDto.PostId,
+                    UserId = postRatingUpdateDto.UserId,
+                    IsThumbsUp = postRatingUpdateDto.IsThumbsUp,
+                };
+
+                _dataContext.PostRatings.Add(newRating);
+            }
+
+            else
+            {
+                //updating the existing rating
+                existingRating.IsThumbsUp = postRatingUpdateDto.IsThumbsUp == existingRating.IsThumbsUp ? null : postRatingUpdateDto.IsThumbsUp;
+                _dataContext.PostRatings.Update(existingRating);
+            }
+
+            _dataContext.SaveChanges();
+            return Ok("Rating has been updated");
+        }
+
     }
 }

@@ -21,6 +21,6 @@
         public Reply Reply { get; set; }
         public string UserId { get; set; }
         public User? User { get; set; }
-        public bool IsThumbsUp { get; set; }
+        public bool? IsThumbsUp { get; set; }
     }
 }

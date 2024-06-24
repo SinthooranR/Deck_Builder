@@ -67,6 +67,7 @@ namespace YTCG_Deck_Builder_API.Controllers
                 return BadRequest(result.Errors);
             }
         }
+
         [HttpPost("login")]
         public async Task<IActionResult> LoginUser([FromBody] UserLoginDto userLoginDto)
         {
@@ -114,6 +115,56 @@ namespace YTCG_Deck_Builder_API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
             }
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> deleteUser(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            if (user.Posts != null)
+            {
+                _dataContext.Posts.RemoveRange(user.Posts);
+            }
+
+            if (user.Replies != null)
+            {
+                _dataContext.Replies.RemoveRange(user.Replies);
+            }
+
+            if (user.PostRatings != null)
+            {
+                _dataContext.PostRatings.RemoveRange(user.PostRatings);
+            }
+
+            if (user.ReplyRatings != null)
+            {
+                _dataContext.ReplyRatings.RemoveRange(user.ReplyRatings);
+            }
+
+
+            if (user.Decks != null)
+            {
+                _dataContext.Decks.RemoveRange(user.Decks);
+            }
+
+            if (user.Cards != null)
+            {
+                _dataContext.Cards.RemoveRange(user.Cards);
+            }
+
+
+            _dataContext.Remove(user);
+            _dataContext.SaveChanges();
+
+            return Ok("User Removed Successfully, Refreshing Page");
+        }
+
+
 
 
     }

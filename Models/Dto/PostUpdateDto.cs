@@ -6,7 +6,13 @@
 
         public string Description { get; set; }
         public string UserId { get; set; }
-
         public int PostId { get; set; }
+    }
+
+    public class PostRatingUpdateDto
+    {
+        public int PostId { get; set; }
+        public string UserId { get; set; }
+        public bool? IsThumbsUp { get; set; }
     }
 }
