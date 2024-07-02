@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-using System.Text.Json.Serialization;
 using YTCG_Deck_Builder_API.Data;
 using YTCG_Deck_Builder_API.Models.Entitities;
 using YTCG_Deck_Builder_API.Services;
@@ -18,17 +16,17 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
 });
 
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowOrigin", builder =>
     {
-        builder.WithOrigins()
+        builder.WithOrigins("http://localhost:3000")
                .AllowAnyMethod()
                .AllowAnyHeader()
                .AllowCredentials();
     });
 });
+
 
 builder.Services.AddScoped<TokenGenerator>();
 

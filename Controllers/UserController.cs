@@ -60,7 +60,7 @@ namespace YTCG_Deck_Builder_API.Controllers
 
             if (result.Succeeded)
             {
-                return Ok(newUser);
+                return Ok("New User has been registered successfully");
             }
             else
             {
