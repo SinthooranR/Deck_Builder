@@ -47,7 +47,7 @@ namespace YTCG_Deck_Builder_API.Controllers
             {
                 UserName = userCreateDto.Username,
                 Email = userCreateDto.Email,
-                CreatedAt = DateTime.Now,
+                CreatedAt = DateTime.UtcNow,
                 Decks = [],
                 Cards = [],
                 Posts = [],

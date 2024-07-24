@@ -16,11 +16,11 @@
 
         public string Attribute { get; set; }
 
-        public int Attack { get; set; }
+        public int Atk { get; set; }
 
-        public int Defense { get; set; }
+        public int Def { get; set; }
 
-        public string Description { get; set; }
+        public string Desc { get; set; }
 
         public string ImageUrl { get; set; }
 

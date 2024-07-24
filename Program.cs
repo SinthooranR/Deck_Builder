@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using YTCG_Deck_Builder_API.Data;
+using YTCG_Deck_Builder_API.Hubs;
 using YTCG_Deck_Builder_API.Models.Entitities;
 using YTCG_Deck_Builder_API.Services;
 
@@ -15,6 +16,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
     options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
 });
+
+builder.Services.AddSignalR();
 
 builder.Services.AddCors(options =>
 {
@@ -56,5 +59,7 @@ app.UseCors("AllowOrigin");
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<PostRatingHub>("/postRatingHub");
+
 
 app.Run();

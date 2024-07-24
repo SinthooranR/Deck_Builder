@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace YTCG_Deck_Builder_API.Models.Entitities
+﻿namespace YTCG_Deck_Builder_API.Models.Entitities
 {
     public class Card
     {
@@ -22,11 +20,11 @@ namespace YTCG_Deck_Builder_API.Models.Entitities
 
         public string Attribute { get; set; }
 
-        public int Attack {  get; set; }
+        public int Atk { get; set; }
 
-        public int Defense { get; set; }
+        public int Def { get; set; }
 
-        public string Description { get; set; }
+        public string Desc { get; set; }
 
         public string ImageUrl { get; set; }
 

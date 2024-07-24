@@ -25,7 +25,7 @@ namespace YTCG_Deck_Builder_API.Controllers
         [HttpGet("{postId}")]
         public IActionResult GetAllRepliesByPost(int postId)
         {
-            var replies = _dataContext.Replies.Where(r => r.PostId == postId).ToList();
+            var replies = _dataContext.Replies.Where(r => r.PostId == postId).Select(r => new Reply() { CreatedAt = r.CreatedAt, Id = r.Id, PostId = r.PostId, ReplyRatings = r.ReplyRatings, Text = r.Text, UpdatedAt = r.UpdatedAt }).ToList();
             return Ok(replies);
         }
 

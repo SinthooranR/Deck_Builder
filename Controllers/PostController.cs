@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using YTCG_Deck_Builder_API.Data;
+using YTCG_Deck_Builder_API.Hubs;
 using YTCG_Deck_Builder_API.Models.Dto;
 using YTCG_Deck_Builder_API.Models.Entitities;
 
@@ -14,18 +16,46 @@ namespace YTCG_Deck_Builder_API.Controllers
         private readonly DataContext _dataContext;
         private readonly UserManager<User> _userManager;
         private readonly ILogger<PostController> _logger;
-        public PostController(DataContext dataContext, ILogger<PostController> logger, UserManager<User> userManager)
+        private readonly IHubContext<PostRatingHub> _hubContext;
+
+        public PostController(DataContext dataContext, ILogger<PostController> logger, UserManager<User> userManager, IHubContext<PostRatingHub> hubContext)
         {
             _dataContext = dataContext;
             _logger = logger;
             _userManager = userManager;
+            _hubContext = hubContext;
         }
 
         [HttpGet]
         public IActionResult getAllPosts()
         {
             var posts = _dataContext.Posts.ToList();
-            return Ok(posts);
+            var updatedPosts = posts.Select(p =>
+            {
+
+                var postDto = new Post()
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    CreatedAt = p.CreatedAt,
+                    UpdatedAt = p.UpdatedAt,
+                    PostRatings = _dataContext.PostRatings.Where(pr => pr.PostId == p.Id).Select(pr => new PostRating() { Id = pr.Id, PostId = pr.PostId, UserId = pr.UserId, IsThumbsUp = pr.IsThumbsUp }).ToList(),
+                    Description = p.Description,
+                    Replies = _dataContext.Replies.Where(r => r.Id == p.Id).Select(r => new Reply()
+                    {
+                        PostId = r.PostId,
+                        Text = r.Text,
+                        UserId = r.UserId,
+                    }).ToList(),
+                    UserId = p.UserId,
+                };
+
+                return postDto;
+
+            }
+            );
+
+            return Ok(updatedPosts);
 
 
         }
@@ -154,7 +184,12 @@ namespace YTCG_Deck_Builder_API.Controllers
                 _dataContext.PostRatings.Update(existingRating);
             }
 
-            _dataContext.SaveChanges();
+            await _dataContext.SaveChangesAsync();
+
+            await _hubContext.Clients.All.SendAsync("ReceiveRatingUpdate", postRatingUpdateDto);
+
+
+
             return Ok("Rating has been updated");
         }
 

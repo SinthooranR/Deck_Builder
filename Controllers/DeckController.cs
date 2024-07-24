@@ -41,7 +41,26 @@ namespace YTCG_Deck_Builder_API.Controllers
         [HttpGet("deckId")]
         public IActionResult getDeckById([FromQuery] int deckId)
         {
-            var deck = _dataContext.Decks.Where(d => d.Id == deckId).Select(d => new Deck() { Id = d.Id, Name = d.Name, Cards = d.Cards.Select(c => new Card() { Id = c.Id, Name = c.Name }).ToList() }).ToList();
+            var deck = _dataContext.Decks.Where(d => d.Id == deckId).Select(d => new Deck()
+            {
+                Id = d.Id,
+                Name = d.Name,
+                Cards = d.Cards.Select(c => new Card()
+                {
+                    UrlId = c.UrlId,
+                    Name = c.Name,
+                    Atk = c.Atk,
+                    Def = c.Def,
+                    Desc = c.Desc,
+                    Attribute = c.Attribute,
+                    FrameType = c.FrameType,
+                    ImageUrl = c.ImageUrl,
+                    Level = c.Level,
+                    Race = c.Race,
+                    ShopUrl = c.ShopUrl,
+                    Type = c.Type
+                }).ToList()
+            }).FirstOrDefault();
 
             if (deck == null)
             {

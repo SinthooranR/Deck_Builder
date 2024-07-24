@@ -40,9 +40,9 @@ namespace YTCG_Deck_Builder_API.Controllers
                 Type = c.Type,
                 Race = c.Race,
                 Attribute = c.Attribute,
-                Attack = c.Attack,
-                Defense = c.Defense,
-                Description = c.Description,
+                Atk = c.Atk,
+                Def = c.Def,
+                Desc = c.Desc,
                 ImageUrl = c.ImageUrl,
                 ShopUrl = c.ShopUrl,
             });
@@ -50,7 +50,7 @@ namespace YTCG_Deck_Builder_API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> updateCardsInDeck([FromQuery] int deckId, [FromQuery] string userdId, [FromBody] List<CardAddDto> cards)
+        public IActionResult updateCardsInDeck([FromQuery] int deckId, [FromQuery] string userdId, [FromBody] List<CardAddDto> cards)
         {
             var deck = _dataContext.Decks.Include(d => d.Cards).Where(d => d.Id == deckId && d.UserId.Equals(userdId)).FirstOrDefault();
             if (deck == null)
@@ -69,9 +69,9 @@ namespace YTCG_Deck_Builder_API.Controllers
                 Type = c.Type,
                 Race = c.Race,
                 Attribute = c.Attribute,
-                Attack = c.Attack,
-                Defense = c.Defense,
-                Description = c.Description,
+                Atk = c.Atk,
+                Def = c.Def,
+                Desc = c.Desc,
                 ImageUrl = c.ImageUrl,
                 ShopUrl = c.ShopUrl,
                 DeckId = deckId,
