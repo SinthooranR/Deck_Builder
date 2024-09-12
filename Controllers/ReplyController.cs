@@ -54,7 +54,7 @@ namespace YTCG_Deck_Builder_API.Controllers
             var reply = new Reply()
             {
                 Text = replyCreateDto.Text,
-                User = user,
+                //User = user,
                 CreatedAt = DateTime.Now,
                 UserId = replyCreateDto.UserId,
                 ReplyRatings = [],

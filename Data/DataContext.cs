@@ -22,17 +22,17 @@ namespace YTCG_Deck_Builder_API.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Deck>()
-                .HasOne(d => d.User)
-                .WithMany(u => u.Decks)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+            //modelBuilder.Entity<Deck>()
+            //    .HasOne(d => d.User)
+            //    .WithMany(u => u.Decks)
+            //    .HasForeignKey(d => d.UserId)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Card>()
-                .HasOne(c => c.User)
-                .WithMany(u => u.Cards)
-                .HasForeignKey(c => c.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+            //modelBuilder.Entity<Card>()
+            //    .HasOne(c => c.User)
+            //    .WithMany(u => u.Cards)
+            //    .HasForeignKey(c => c.UserId)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Card>()
                 .HasOne(c => c.Deck)
@@ -40,17 +40,30 @@ namespace YTCG_Deck_Builder_API.Data
                 .HasForeignKey(c => c.DeckId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Post>()
-                .HasOne(p => p.User)
-                .WithMany(u => u.Posts)
-                .HasForeignKey(p => p.UserId)
+
+            modelBuilder.Entity<PostRating>()
+                .HasOne(pr => pr.Post)
+                .WithMany(p => p.PostRatings)
+                .HasForeignKey(pr => pr.PostId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Reply>()
-                .HasOne(r => r.User)
-                .WithMany(u => u.Replies)
-                .HasForeignKey(r => r.UserId)
+            modelBuilder.Entity<ReplyRating>()
+                .HasOne(rr => rr.Reply)
+                .WithMany(r => r.ReplyRatings)
+                .HasForeignKey(rr => rr.ReplyId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            //modelBuilder.Entity<Post>()
+            //    .HasOne(p => p.User)
+            //    .WithMany(u => u.Posts)
+            //    .HasForeignKey(p => p.UserId)
+            //    .OnDelete(DeleteBehavior.Restrict);
+
+            //modelBuilder.Entity<Reply>()
+            //    .HasOne(r => r.User)
+            //    .WithMany(u => u.Replies)
+            //    .HasForeignKey(r => r.UserId)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Reply>()
                 .HasOne(r => r.Post)
